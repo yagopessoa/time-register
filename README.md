@@ -1,46 +1,40 @@
-## Electron + TypeScript + React
-Boilerplate for a project using Electron, React and Typescript
+## Time Register
+
+Simple app project for handling work day time register. Created using Electron + TypeScript + React (boilerplate [here](https://github.com/diego3g/electron-typescript-react) by Diego).
 
 ## Installation
 
 Use a package manager of your choice (npm, yarn, etc.) in order to install all dependencies
 
 ```bash
-npm install
-```
-
-```bash
 yarn install
 ```
 
 ## Usage
+
 In order to run this project 2 scripts will need to be executed `dev:react` and `dev:electron`, run each one in a different terminal and always run `dev:react` before `dev:electron`, or `dev` to run them in order automatically
 
 ```bash
-npm run dev:react
+yarn dev:react
 ```
+
 ```bash
-npm run dev:electron
+yarn dev:electron
 ```
 
 or
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 ## Packaging
+
 To generate a project package run `package`
 
 ```bash
-npm run package
+yarn package
 ```
-
-
-
-## Contributing
-
-Pull requests are always welcome 😃.
 
 ## License
 

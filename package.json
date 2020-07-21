@@ -68,9 +68,15 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@styled-icons/evaicons-outline": "^10.6.0",
+    "@styled-icons/evaicons-solid": "^10.6.0",
+    "@styled-icons/remix-fill": "^10.6.0",
+    "formik": "^2.1.5",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "styled-icons": "^10.10.0"
   },
   "build": {
     "appId": "your.id",

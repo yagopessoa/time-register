@@ -1,20 +1,24 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { GlobalStyle } from './styles/GlobalStyle'
+import React from 'react';
+import { render } from 'react-dom';
+import { GlobalStyle } from './styles/GlobalStyle';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
-import Greetings from './components/Greetings'
+import Home from './components/Home';
 
-const mainElement = document.createElement('div')
-mainElement.setAttribute('id', 'root')
-document.body.appendChild(mainElement)
+const mainElement = document.createElement('div');
+mainElement.setAttribute('id', 'root');
+document.body.appendChild(mainElement);
 
 const App = () => {
+  moment.locale('pt-br');
+
   return (
     <>
       <GlobalStyle />
-      <Greetings />
+      <Home />
     </>
-  )
-}
+  );
+};
 
-render(<App />, mainElement)
+render(<App />, mainElement);

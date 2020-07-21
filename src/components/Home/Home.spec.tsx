@@ -1,10 +1,10 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 
-import Greetings from './index'
+import Home from './index'
 
-test('Greetings should renders', () => {
-  const { getByText, getByAltText } = render(<Greetings />)
+test('Home should renders', () => {
+  const { getByText, getByAltText } = render(<Home />)
 
   expect(
     getByText('An Electron boilerplate including TypeScript, React, Jest and ESLint.')
