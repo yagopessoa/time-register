@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import MaskedInput from 'react-text-mask';
 
 function hexToRgb(hex: string, opacity: number | string = 1) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -91,7 +92,10 @@ export const TodayBalanceText = styled.div`
   font-size: 24px;
 `;
 
-export const TextInput = styled.input.attrs(() => ({ type: 'text' }))`
+export const TextInput = styled(MaskedInput).attrs(() => ({
+  mask: [/\d/, /\d/, ':', /\d/, /\d/],
+  guide: false,
+}))`
   width: 80px;
   max-width: calc(100% - 32px);
   height: 44px;
@@ -104,7 +108,7 @@ export const TextInput = styled.input.attrs(() => ({ type: 'text' }))`
   color: ${hexToRgb(BLACK, 0.85)};
   padding: 12px;
   margin: 0 8px;
-  text-align: right;
+  text-align: center;
 
   :hover,
   :focus {
