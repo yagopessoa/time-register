@@ -66,6 +66,9 @@ interface IDaysValues {
 }
 
 export function getAllTimeBalance(values: IValue): string {
+  // TODO: balance is not sum of all hours
+  //       balance is either positive or negative based on 8hrs/day
+
   const days: IDaysValues = {};
   const durations: Array<moment.Duration> = [];
 

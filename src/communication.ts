@@ -1,6 +1,8 @@
+import { IValue } from './components/Home';
+
 const RETRIEVE_DATA_TIMEOUT = 10000;
 
-export function saveData(data: object | any): void {
+export function saveData(data: IValue): void {
   const { ipcRenderer } = window.require('electron');
   ipcRenderer.send('save-data', data);
 }
@@ -20,4 +22,9 @@ export async function readData<T>(): Promise<T> {
 
     ipcRenderer.send('request-data');
   });
+}
+
+export function generateReport(data: IValue): void {
+  const { ipcRenderer } = window.require('electron');
+  ipcRenderer.send('generate-report', data);
 }

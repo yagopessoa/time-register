@@ -26,7 +26,7 @@ import {
 } from './styles';
 import Checkbox from '../Checkbox';
 import { getTodayBalance, getAllTimeBalance } from '../../utils';
-import { saveData, readData } from '../../communication';
+import { saveData, readData, generateReport } from '../../communication';
 
 export interface IValue {
   [x: string]: string;
@@ -81,6 +81,10 @@ const Home: React.FC = () => {
       setShowInputs(true);
       renderTodayBalance();
     }, 50);
+  };
+
+  const handleGenerateReport = () => {
+    generateReport(values);
   };
 
   return (
@@ -145,8 +149,9 @@ const Home: React.FC = () => {
         </Column>
         <Row between bottom>
           <ButtonContainer>
-            <Checkbox>Apenas deste mês</Checkbox>
-            <Button>
+            {/* TODO: obs. instead of checkbox */}
+            <Checkbox>* Apenas deste mês</Checkbox>
+            <Button onClick={handleGenerateReport}>
               <ExcelIcon />
               Relatório
             </Button>
@@ -160,6 +165,7 @@ const Home: React.FC = () => {
           </BalanceContainer>
         </Row>
         <Row center>
+          {/* TODO: smaller font on footer */}
           Desenvolvido com <Heart /> por Yago Pessoa.
         </Row>
       </CenterContainer>

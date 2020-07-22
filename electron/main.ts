@@ -2,9 +2,12 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import * as path from 'path';
 import * as url from 'url';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 import 'regenerator-runtime/runtime.js';
 
 import { saveData, getData } from './data';
+import { IValues, exportExcel } from './sheets';
 
 let mainWindow: Electron.BrowserWindow | null;
 
@@ -40,10 +43,16 @@ function createWindow() {
 
 app
   .on('ready', () => {
+    moment.locale('pt-br');
+
     const DATA_DIR = __dirname + '/data/';
+    const REPORT_DIR = __dirname + '/report/';
 
     if (!existsSync(DATA_DIR)) {
       mkdirSync(DATA_DIR);
+    }
+    if (!existsSync(REPORT_DIR)) {
+      mkdirSync(REPORT_DIR);
     }
 
     createWindow();
@@ -53,8 +62,8 @@ app
 
 app.allowRendererProcessReuse = true;
 
-ipcMain.on('save-data', (_, data) => {
-  console.log(`[SAVING]:\n`, data, '\n');
+ipcMain.on('save-data', (_, data: IValues) => {
+  console.log('[SAVING]\n');
   saveData(data);
 });
 
@@ -62,11 +71,16 @@ ipcMain.on('request-data', (event) => {
   console.log('[GETTING DATA]\n');
   getData()
     .then((data: any) => {
-      console.log(`[SENDING]:\n`, data, '\n');
+      console.log('[SENDING]\n');
       event.reply('return-data', data);
     })
     .catch((err: any) => {
       console.log(err);
       event.reply('return-data', undefined);
     });
+});
+
+ipcMain.on('generate-report', (_, data: IValues) => {
+  console.log('[GENERATING REPORT]\n');
+  exportExcel(data);
 });
