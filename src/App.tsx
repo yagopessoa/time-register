@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { GlobalStyle } from './styles/GlobalStyle';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+import 'regenerator-runtime/runtime.js';
 
 import Home from './components/Home';
 

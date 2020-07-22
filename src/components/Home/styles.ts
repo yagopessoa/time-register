@@ -46,6 +46,13 @@ export const Row = styled.div<IRow>`
   width: 100%;
   align-items: center;
 
+  & > svg {
+    fill: red;
+    width: 14px;
+    height: 14px;
+    margin: 2px 6px 0 6px;
+  }
+
   ${({ start }) =>
     start &&
     css`
@@ -151,6 +158,7 @@ export const BalanceContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-bottom: -3px;
 `;
 
 export const Total = styled.div`

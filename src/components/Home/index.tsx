@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import moment from 'moment';
 import { FileExcel2 as ExcelIcon } from '@styled-icons/remix-fill';
 import {
   Clock as ClockIcon,
   ArrowheadLeft,
   ArrowheadRight,
+  Heart,
 } from '@styled-icons/evaicons-solid';
 
 import {
@@ -24,11 +25,14 @@ import {
   Label,
 } from './styles';
 import Checkbox from '../Checkbox';
-import { getTodayBalance } from '../../utils';
+import { getTodayBalance, getAllTimeBalance } from '../../utils';
+import { saveData, readData } from '../../communication';
 
 export interface IValue {
   [x: string]: string;
 }
+
+const DEBOUNCE_TIME = 2000;
 
 const Home: React.FC = () => {
   const [currentDay] = useState(moment());
@@ -36,6 +40,17 @@ const Home: React.FC = () => {
 
   const [values, setValues] = useState<IValue>({});
   const [showInputs, setShowInputs] = useState(true);
+
+  useEffect(() => {
+    readData<IValue>().then((data: IValue) => setValues(data || {}));
+  }, []);
+
+  useEffect(() => {
+    const inputTimeout = setTimeout(() => {
+      saveData(values);
+    }, DEBOUNCE_TIME);
+    return () => clearTimeout(inputTimeout);
+  }, [values]);
 
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = event?.currentTarget || {};
@@ -49,6 +64,10 @@ const Home: React.FC = () => {
     () => getTodayBalance(currentDay.format('DD/MM/YYYY'), values),
     [values]
   );
+
+  const renderTotalBalance = useCallback(() => getAllTimeBalance(values), [
+    values,
+  ]);
 
   const handleChangeDay = (direction: string) => () => {
     setShowInputs(false);
@@ -135,10 +154,13 @@ const Home: React.FC = () => {
           <BalanceContainer>
             <Total>
               <ClockIcon />
-              00:00
+              {renderTotalBalance()}
             </Total>
             <ClockLabel>Saldo total</ClockLabel>
           </BalanceContainer>
+        </Row>
+        <Row center>
+          Desenvolvido com <Heart /> por Yago Pessoa.
         </Row>
       </CenterContainer>
       <LateralButton right onClick={handleChangeDay('forward')}>

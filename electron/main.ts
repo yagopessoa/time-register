@@ -1,13 +1,17 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { existsSync, mkdirSync } from 'fs';
 import * as path from 'path';
 import * as url from 'url';
+import 'regenerator-runtime/runtime.js';
+
+import { saveData, getData } from './data';
 
 let mainWindow: Electron.BrowserWindow | null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 600,
-    height: 420,
+    height: 440,
     backgroundColor: '#191622',
     webPreferences: {
       nodeIntegration: true,
@@ -35,8 +39,34 @@ function createWindow() {
 }
 
 app
-  .on('ready', createWindow)
+  .on('ready', () => {
+    const DATA_DIR = __dirname + '/data/';
+
+    if (!existsSync(DATA_DIR)) {
+      mkdirSync(DATA_DIR);
+    }
+
+    createWindow();
+  })
   .whenReady()
   .then(() => {});
 
 app.allowRendererProcessReuse = true;
+
+ipcMain.on('save-data', (_, data) => {
+  console.log(`[SAVING]:\n`, data, '\n');
+  saveData(data);
+});
+
+ipcMain.on('request-data', (event) => {
+  console.log('[GETTING DATA]\n');
+  getData()
+    .then((data: any) => {
+      console.log(`[SENDING]:\n`, data, '\n');
+      event.reply('return-data', data);
+    })
+    .catch((err: any) => {
+      console.log(err);
+      event.reply('return-data', undefined);
+    });
+});

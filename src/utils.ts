@@ -9,7 +9,11 @@ export const getDurationFormatted = (duration: Duration) =>
     parseInt(String(duration.asHours()), 10)
   )}:${getDoubleDigitNumber(duration.minutes())}`;
 
-export function getTodayBalance(today: string, values: IValue): string {
+export function getTodayBalance(
+  today: string,
+  values: IValue,
+  formatted: boolean = true
+): string | moment.Duration {
   const start = moment(
     `${today} - ${values[`${today}-start`] || ''}`,
     'DD/MM/YYYY - hh:mm'
@@ -27,8 +31,19 @@ export function getTodayBalance(today: string, values: IValue): string {
     'DD/MM/YYYY - hh:mm'
   );
 
-  let firstPeriod = moment.duration(lunch.diff(start));
-  let secondPeriod = moment.duration(end.diff(back));
+  let firstPeriod;
+  if (start.isValid() && lunch.isValid()) {
+    firstPeriod = moment.duration(lunch.diff(start));
+  } else {
+    firstPeriod = moment.duration(0);
+  }
+
+  let secondPeriod;
+  if (start.isValid() && lunch.isValid()) {
+    secondPeriod = moment.duration(end.diff(back));
+  } else {
+    secondPeriod = moment.duration(0);
+  }
 
   if (firstPeriod.asMilliseconds() < 0) {
     firstPeriod = moment.duration(0);
@@ -43,9 +58,48 @@ export function getTodayBalance(today: string, values: IValue): string {
     return '00:00';
   }
 
-  return getDurationFormatted(total);
+  return formatted ? getDurationFormatted(total) : total;
 }
 
-export function getAllTimeBalance() {
-  // TODO: implement
+interface IDaysValues {
+  [x: string]: IValue;
+}
+
+export function getAllTimeBalance(values: IValue): string {
+  const days: IDaysValues = {};
+  const durations: Array<moment.Duration> = [];
+
+  Object.keys(values).forEach((key: string) => {
+    const day = key.substr(0, 10);
+    days[day] = {};
+  });
+
+  Object.keys(days).forEach((day: string) => {
+    const start = `${day}-start`;
+    const lunch = `${day}-lunch`;
+    const back = `${day}-back`;
+    const end = `${day}-end`;
+
+    days[day] = {
+      [start]: values[start] || '',
+      [lunch]: values[lunch] || '',
+      [back]: values[back] || '',
+      [end]: values[end] || '',
+    };
+
+    const dayDuration = getTodayBalance(
+      day,
+      days[day],
+      false
+    ) as moment.Duration;
+
+    durations.push(dayDuration);
+  });
+
+  const total = durations.reduce(
+    (total, current) => total.add(current),
+    moment.duration(0)
+  );
+
+  return getDurationFormatted(total);
 }
