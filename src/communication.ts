@@ -24,7 +24,7 @@ export async function readData<T>(): Promise<T> {
   });
 }
 
-export function generateReport(data: IValue): void {
+export function generateReport(data: IValue, month: string): void {
   const { ipcRenderer } = window.require('electron');
-  ipcRenderer.send('generate-report', data);
+  ipcRenderer.send('generate-report', data, month);
 }

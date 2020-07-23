@@ -80,7 +80,7 @@ ipcMain.on('request-data', (event) => {
     });
 });
 
-ipcMain.on('generate-report', (_, data: IValues) => {
-  console.log('[GENERATING REPORT]\n');
-  exportExcel(data);
+ipcMain.on('generate-report', (_, data: IValues, month: string) => {
+  console.log(`[GENERATING REPORT]: ${month}\n`);
+  exportExcel(data, month);
 });

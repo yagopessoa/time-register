@@ -1,13 +1,27 @@
 import moment, { Duration } from 'moment';
 import { IValue } from './components/Home';
 
-export const getDoubleDigitNumber = (number: string | number) =>
-  String(number).length === 1 ? `0${number}` : number;
+export const getDoubleDigitNumber = (
+  number: string | number,
+  isMinute = false
+) => {
+  if (String(number).includes('-')) {
+    if (isMinute) {
+      return String(number).length === 2
+        ? `0${String(number).replace('-', '')}`
+        : `${String(number).replace('-', '')}`;
+    }
+    return String(number).length === 2
+      ? `-0${String(number).replace('-', '')}`
+      : number;
+  }
+  return String(number).length === 1 ? `0${number}` : number;
+};
 
 export const getDurationFormatted = (duration: Duration) =>
   `${getDoubleDigitNumber(
     parseInt(String(duration.asHours()), 10)
-  )}:${getDoubleDigitNumber(duration.minutes())}`;
+  )}:${getDoubleDigitNumber(duration.minutes(), true)}`;
 
 export function getTodayBalance(
   today: string,
@@ -66,8 +80,7 @@ interface IDaysValues {
 }
 
 export function getAllTimeBalance(values: IValue): string {
-  // TODO: balance is not sum of all hours
-  //       balance is either positive or negative based on 8hrs/day
+  const requiredPerDay = moment.duration(8, 'hours');
 
   const days: IDaysValues = {};
   const durations: Array<moment.Duration> = [];
@@ -96,7 +109,9 @@ export function getAllTimeBalance(values: IValue): string {
       false
     ) as moment.Duration;
 
-    durations.push(dayDuration);
+    if (dayDuration.asMilliseconds() > 0) {
+      durations.push(dayDuration.subtract(requiredPerDay));
+    }
   });
 
   const total = durations.reduce(
@@ -104,5 +119,6 @@ export function getAllTimeBalance(values: IValue): string {
     moment.duration(0)
   );
 
+  console.log(total.asHours(), total.minutes());
   return getDurationFormatted(total);
 }

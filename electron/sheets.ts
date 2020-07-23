@@ -70,9 +70,11 @@ export function getTodayBalance(
   return formatted ? getDurationFormatted(total) : total;
 }
 
-function getDaysOfCurrentMonth(format: string = 'MM/YYYY'): string[] {
+function getDaysOfCurrentMonth(
+  month: string,
+  format: string = 'MM/YYYY'
+): string[] {
   const daysCount = moment().daysInMonth();
-  const month = moment().format(format);
   const firstDay = moment(`01/${month}`, `DD/${format}`);
   const days: string[] = [];
 
@@ -84,7 +86,7 @@ function getDaysOfCurrentMonth(format: string = 'MM/YYYY'): string[] {
   return days;
 }
 
-export async function exportExcel(values: IValues) {
+export async function exportExcel(values: IValues, month?: string) {
   const days: IDaysValues = {};
 
   const workbook = new xl.Workbook();
@@ -150,33 +152,36 @@ export async function exportExcel(values: IValues) {
     days[day] = {};
   });
 
-  // TODO: months of SELECTED month, not current
-  getDaysOfCurrentMonth().forEach((day: string, index: number) => {
-    const start = `${day}-start`;
-    const lunch = `${day}-lunch`;
-    const back = `${day}-back`;
-    const end = `${day}-end`;
+  getDaysOfCurrentMonth(month || moment().format('MM/YYYY')).forEach(
+    (day: string, index: number) => {
+      const start = `${day}-start`;
+      const lunch = `${day}-lunch`;
+      const back = `${day}-back`;
+      const end = `${day}-end`;
 
-    const row = worksheet.getRow(index + 3);
+      const row = worksheet.getRow(index + 3);
 
-    const totalDay = getTodayBalance(day, {
-      [start]: values[start] || '',
-      [lunch]: values[lunch] || '',
-      [back]: values[back] || '',
-      [end]: values[end] || '',
-    }) as string;
+      const totalDay = getTodayBalance(day, {
+        [start]: values[start] || '',
+        [lunch]: values[lunch] || '',
+        [back]: values[back] || '',
+        [end]: values[end] || '',
+      }) as string;
 
-    row.getCell('day').value = day;
-    row.getCell('weekday').value = moment(day, 'DD/MM/YYYY').format('dddd');
-    row.getCell('start').value = values[start] || '';
-    row.getCell('lunch').value = values[lunch] || '';
-    row.getCell('back').value = values[back] || '';
-    row.getCell('end').value = values[end] || '';
-    row.getCell('totalDay').value = totalDay;
-  });
+      row.getCell('day').value = day;
+      row.getCell('weekday').value = moment(day, 'DD/MM/YYYY').format('dddd');
+      row.getCell('start').value = values[start] || '';
+      row.getCell('lunch').value = values[lunch] || '';
+      row.getCell('back').value = values[back] || '';
+      row.getCell('end').value = values[end] || '';
+      row.getCell('totalDay').value = totalDay;
+    }
+  );
 
-  const month = moment().format('MMMM_YYYY');
-  const fileName = __dirname + `/report/Relatorio_${month}.xlsx`;
+  const identification = (
+    moment(month, 'MM/YYYY') || moment().format('MM/YYYY')
+  ).format('MMMM_YYYY');
+  const fileName = __dirname + `/report/Relatorio_${identification}.xlsx`;
   await workbook.xlsx.writeFile(fileName);
 
   shell.showItemInFolder(fileName);

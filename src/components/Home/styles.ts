@@ -46,13 +46,6 @@ export const Row = styled.div<IRow>`
   width: 100%;
   align-items: center;
 
-  & > svg {
-    fill: red;
-    width: 14px;
-    height: 14px;
-    margin: 2px 6px 0 6px;
-  }
-
   ${({ start }) =>
     start &&
     css`
@@ -148,13 +141,13 @@ export const Label = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  width: 180px;
+  width: 200px;
   display: flex;
   flex-direction: column;
 `;
 
 export const BalanceContainer = styled.div`
-  width: 180px;
+  width: 160px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -269,5 +262,16 @@ export const LateralButton = styled(Button).attrs(() => ({ outlined: true }))`
 
   svg {
     margin: 0;
+  }
+`;
+
+export const FooterRow = styled(Row)`
+  font-size: 12px;
+
+  & > svg {
+    fill: red;
+    width: 12px;
+    height: 12px;
+    margin: 1px 4px 0 4px;
   }
 `;

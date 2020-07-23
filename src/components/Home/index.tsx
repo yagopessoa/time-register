@@ -23,8 +23,9 @@ import {
   ClockLabel,
   Column,
   Label,
+  FooterRow,
 } from './styles';
-import Checkbox from '../Checkbox';
+// import Checkbox from '../Checkbox';
 import { getTodayBalance, getAllTimeBalance } from '../../utils';
 import { saveData, readData, generateReport } from '../../communication';
 
@@ -84,7 +85,7 @@ const Home: React.FC = () => {
   };
 
   const handleGenerateReport = () => {
-    generateReport(values);
+    generateReport(values, currentDay.format('MM/YYYY'));
   };
 
   return (
@@ -149,9 +150,11 @@ const Home: React.FC = () => {
         </Column>
         <Row between bottom>
           <ButtonContainer>
-            {/* TODO: obs. instead of checkbox */}
-            <Checkbox>* Apenas deste mês</Checkbox>
-            <Button onClick={handleGenerateReport}>
+            {/* <Checkbox>Apenas deste mês</Checkbox> */}
+            <Button
+              onClick={handleGenerateReport}
+              title="Relatório do mês selecionado"
+            >
               <ExcelIcon />
               Relatório
             </Button>
@@ -164,10 +167,9 @@ const Home: React.FC = () => {
             <ClockLabel>Saldo total</ClockLabel>
           </BalanceContainer>
         </Row>
-        <Row center>
-          {/* TODO: smaller font on footer */}
-          Desenvolvido com <Heart /> por Yago Pessoa.
-        </Row>
+        <FooterRow center>
+          Desenvolvido com <Heart /> por Yago Pessoa
+        </FooterRow>
       </CenterContainer>
       <LateralButton right onClick={handleChangeDay('forward')}>
         <ArrowheadRight />
