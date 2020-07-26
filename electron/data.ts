@@ -1,7 +1,10 @@
 import { writeFile, readFile } from 'jsonfile';
+import * as path from 'path';
+
+import { getDataDir } from './filenames';
 
 export const saveData = async (data: object | any) => {
-  const fileName = __dirname + '/data/data.json';
+  const fileName = path.join(getDataDir(), 'data.json');
 
   await writeFile(fileName, data, { spaces: 2 })
     .then(() => {
@@ -13,6 +16,6 @@ export const saveData = async (data: object | any) => {
 };
 
 export const getData = () => {
-  const fileName = __dirname + '/data/data.json';
+  const fileName = path.join(getDataDir(), 'data.json');
   return readFile(fileName);
 };

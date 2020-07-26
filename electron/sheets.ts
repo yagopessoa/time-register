@@ -1,6 +1,9 @@
-import { shell } from 'electron';
+import { shell, remote } from 'electron';
+import * as path from 'path';
 import xl from 'exceljs';
 import moment, { Duration } from 'moment';
+
+import { getReportDir } from './filenames';
 
 export interface IValues {
   [x: string]: string;
@@ -181,10 +184,16 @@ export async function exportExcel(values: IValues, month?: string) {
   const identification = (
     moment(month, 'MM/YYYY') || moment().format('MM/YYYY')
   ).format('MMMM_YYYY');
-  const fileName = __dirname + `/report/Relatorio_${identification}.xlsx`;
+
+  const fileName = path.join(
+    getReportDir(),
+    `Relatorio_${identification}.xlsx`
+  );
+
   await workbook.xlsx.writeFile(fileName);
 
-  shell.showItemInFolder(fileName);
+  shell?.showItemInFolder(fileName);
+  remote?.shell?.showItemInFolder(fileName);
 
   console.log(`${fileName} saved!\n`);
 }

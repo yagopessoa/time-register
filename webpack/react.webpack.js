@@ -35,5 +35,5 @@ module.exports = {
     filename: 'js/[name].js',
     publicPath: './',
   },
-  plugins: [new HtmlWebpackPlugin({ title: 'Relógio de Ponto' })],
+  plugins: [new HtmlWebpackPlugin({ title: 'Registro de Ponto' })],
 };

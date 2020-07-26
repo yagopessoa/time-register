@@ -2,12 +2,14 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
 import * as path from 'path';
 import * as url from 'url';
+import os from 'os';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import 'regenerator-runtime/runtime.js';
 
 import { saveData, getData } from './data';
 import { IValues, exportExcel } from './sheets';
+import { getDataDir, getReportDir } from './filenames';
 
 let mainWindow: Electron.BrowserWindow | null;
 
@@ -45,8 +47,17 @@ app
   .on('ready', () => {
     moment.locale('pt-br');
 
-    const DATA_DIR = __dirname + '/data/';
-    const REPORT_DIR = __dirname + '/report/';
+    if (os.platform() === 'linux') {
+      if (!existsSync(os.homedir() + '/Downloads')) {
+        mkdirSync(os.homedir() + '/Downloads');
+      }
+      if (!existsSync(os.homedir() + '/Downloads/registro-de-ponto')) {
+        mkdirSync(os.homedir() + '/Downloads/registro-de-ponto');
+      }
+    }
+
+    const DATA_DIR = getDataDir();
+    const REPORT_DIR = getReportDir();
 
     if (!existsSync(DATA_DIR)) {
       mkdirSync(DATA_DIR);
