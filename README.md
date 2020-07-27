@@ -13,9 +13,9 @@
   <img alt="Image do projeto" width="450px" src="./docs/demo.png" />
 </p>
 
-## Features
+## Technologies
 
-This front-end features the latest tools and practices in web development!
+This app features the latest tools and practices in web development!
 
 - :electron: **Electron** — Cross-platform desktop apps with JavaScript, HTML, and CSS
 - ⚛ **React** — A library to build user interfaces
