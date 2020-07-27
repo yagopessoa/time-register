@@ -48,11 +48,11 @@ app
     moment.locale('pt-br');
 
     if (os.platform() === 'linux') {
-      if (!existsSync(os.homedir() + '/Downloads')) {
-        mkdirSync(os.homedir() + '/Downloads');
+      if (!existsSync(os.homedir() + '/Documents')) {
+        mkdirSync(os.homedir() + '/Documents');
       }
-      if (!existsSync(os.homedir() + '/Downloads/registro-de-ponto')) {
-        mkdirSync(os.homedir() + '/Downloads/registro-de-ponto');
+      if (!existsSync(os.homedir() + '/Documents/registro-de-ponto')) {
+        mkdirSync(os.homedir() + '/Documents/registro-de-ponto');
       }
     }
 
